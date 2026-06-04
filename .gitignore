@@ -1,0 +1,28 @@
+# Python
+*.py[cod]
+__pycache__/
+*.so
+
+# Django
+*.log
+*.pot
+*.pyc
+*.pyo
+*.sqlite3
+/db.sqlite3
+/media
+/staticfiles
+
+# Env
+env/
+venv/
+*.env
+
+# VS Code
+.vscode/
+
+# User files
+*.png
+*.jpg
+*.jpeg
+*.log
