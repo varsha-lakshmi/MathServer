@@ -1,4 +1,5 @@
 # Ex.04 Design a Website for Server Side Processing
+
 ## Date:
 
 ## AIM:
@@ -6,121 +7,100 @@ To create a web page to calculate total bill amount with GST from price and GST 
 
 ## FORMULA:
 Bill = P + (P * GST / 100)
-<br> P --> Price (in Rupees)
-<br> GST --> GST (in Percentage)
-<br> Bill --> Total Bill Amount (in Rupees)
+
+- P → Price (in Rupees)
+- GST → GST (in Percentage)
+- Bill → Total Bill Amount (in Rupees)
 
 ## DESIGN STEPS:
 
-### Step 1:
-Clone the repository from GitHub.
-
-### Step 2:
-Create Django Admin project.
-
-### Step 3:
-Create a New App under the Django Admin project.
-
-### Step 4:
-Create a HTML file to implement form based input and output.
-
-### Step 5:
-Create python programs for views and urls to perform server side processing.
-
-### Step 6:
-Receive input values from the form using request.POST.get().
-
-### Step 7:
-Calculate the total bill amount (including GST).
-
-### Step 8:
-Display the calculated result in the server console.
-
-### Step 9:
-Render the result to the HTML template.
-
-### Step 10:
-Publish the website in Localhost.
+1. Clone the repository from GitHub.
+2. Create a Django admin project.
+3. Create a new app under the Django project.
+4. Create an HTML template for form input and output.
+5. Create view and URL handlers for server-side processing.
+6. Receive input values from the form using `request.POST.get()`.
+7. Calculate the total bill amount including GST.
+8. Render the calculated result to the HTML template.
+9. Publish the website on localhost.
 
 ## PROGRAM:
-```
+
+### Template (`gstapp/templates/gstapp/gst.html`)
+```html
+<!DOCTYPE html>
 <html>
 <head>
-    <title>GST Calculator</title>
+    <title>GST Bill Calculator</title>
 </head>
 <body>
 
+    <h1>GST Bill Calculator</h1>
+
     <form method="post">
-    <h2>GST Calculator</h2>
-
         {% csrf_token %}
-        <label for="price">Price :</label>
-        <input type="text" name="price" required><br><br>
 
-        <label for="gst">GST (%):</label>
-        <input type="text" name="gst" required><br><br>
+        <label>Price:</label>
+        <input type="number" name="price" required>
+        <br><br>
+
+        <label>GST Percentage:</label>
+        <input type="number" name="gst" required>
+        <br><br>
 
         <button type="submit">Calculate</button>
     </form>
 
-    {% if gst_amt is not None %}
-        <h2>Result:</h2>
-        {% if "Error" in gst_amt|stringformat:"s" %}
-            <p style="color: red;">{{ gst_amt }}</p>
-        {% else %}
-            <p>GST: {{ gst_amt|stringformat:".2f" }}</p>
-        {% endif %}
+    {% if bill %}
+        <h2>Total Bill Amount = ₹ {{ bill }}</h2>
     {% endif %}
+
 </body>
 </html>
 ```
-```
+
+### View (`gstapp/views.py`)
+```python
 from django.shortcuts import render
 
-def gst_amt_calc(request):
-
-    gst_amt = None
+def gst(request):
+    bill = None
 
     if request.method == 'POST':
+        price = float(request.POST['price'])
+        gst_percent = float(request.POST['gst'])
+        gst_amount = (price * gst_percent) / 100
+        bill = price + gst_amount
 
-        try:
-            price = float(request.POST.get('price'))
-            gst = float(request.POST.get('gst'))
+    return render(request, 'gstapp/gst.html', {'bill': bill})
+```
 
-            if price >= 0 and gst >= 0:
-
-                gst_amt = price + ((price * gst) / 100)
-
-            else:
-                gst_amt = "Error: Inputs cannot be negative."
-
-        except ValueError:
-
-            gst_amt = "Error: Please enter valid numbers."
-
-    context = {
-        'gst_amt': gst_amt
-    }
-
-    return render(request, 'bill.html', context)
-    ```
-    ```
-    from django.contrib import admin
+### URLs (`gstapp/urls.py`)
+```python
 from django.urls import path
-from billapp import views
+from . import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', views.gst_amt_calc, name='gst_amt'),
+    path('', views.gst, name='gst'),
 ]
 ```
 
+### Project URLs (`mathserver/urls.py`)
+```python
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('gstapp.urls')),
+]
+```
 
 ## OUTPUT - SERVER SIDE:
-![alt text](<Screenshot 2026-06-01 102752.png>)
+Screenshot output will display when the form is submitted and the page is rendered.
 
 ## OUTPUT - WEBPAGE:
+The webpage displays a form for price and GST percentage and shows the total bill amount after calculation.
 
-![alt text](<Screenshot 2026-06-01 102736.png>)
 ## RESULT:
-The a web page to calculate total bill amount with GST from price and GST percentage using server-side scripts is created successfully.
+A web page to calculate total bill amount with GST from price and GST percentage using server-side scripts is created successfully.
