@@ -97,10 +97,12 @@ urlpatterns = [
 ```
 
 ## OUTPUT - SERVER SIDE:
-Screenshot output will display when the form is submitted and the page is rendered.
+<img width="1073" height="311" alt="Screenshot 2026-06-04 235129" src="https://github.com/user-attachments/assets/b8555e8d-5784-4fc4-a895-d5f0c883e86b" />
+
 
 ## OUTPUT - WEBPAGE:
-The webpage displays a form for price and GST percentage and shows the total bill amount after calculation.
+<img width="1090" height="557" alt="Screenshot 2026-06-04 234634" src="https://github.com/user-attachments/assets/d3c63158-ddca-4e3a-aad7-2b46a01e766a" />
+
 
 ## RESULT:
 A web page to calculate total bill amount with GST from price and GST percentage using server-side scripts is created successfully.
